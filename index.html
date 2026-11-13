@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="description" content="GSMF26 plaket dizaynı üçün səsvermə"><meta property="og:title" content="GSMF26 Plaket Design"><meta property="og:description" content="Variantlara baxın və ən yaxşısına səs verin"><meta property="og:image" content="img/v17.jpg">
+<meta charset="utf-8">
+<title>GSMF26 Plaket Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+  /* GSMF night: deep violet ground, glossy purple accents, white type */
+  :root {
+    --bg: #0B0420;
+    --bg-2: #140838;
+    --card: #170A3D;
+    --line: rgba(201, 194, 221, .16);
+    --fg: #FFFFFF;
+    --muted: #C9C2DD;
+    --dim: #8F86AD;
+    --purple: #6806CC;
+    --violet: #8F6AE0;
+    --lilac: #B79CF5;
+    --ok: #7CE3B5;
+    --font: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .glow { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(60vmax 50vmax at 100% 0%, rgba(104, 6, 204, .45), transparent 60%),
+      radial-gradient(50vmax 40vmax at 0% 100%, rgba(59, 19, 127, .55), transparent 60%); }
+  .wrap { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto;
+    padding-left: max(18px, env(safe-area-inset-left, 0px));
+    padding-right: max(18px, env(safe-area-inset-right, 0px)); }
+
+  /* hero */
+  header.hero { padding-block: 28px 8px; display: grid; gap: 22px; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .top img.logo { height: 44px; width: auto; }
+  .pill { font-size: 13px; color: var(--lilac); border: 1px solid rgba(183,156,245,.35); border-radius: 999px; padding: 6px 12px; white-space: nowrap; }
+  .hero-grid { display: grid; gap: 18px; align-items: center; }
+  .hero h1 { font-size: clamp(34px, 9vw, 64px); line-height: 1.02; letter-spacing: -0.02em; margin: 0; font-weight: 800; text-wrap: balance; }
+  .hero h1 span { color: var(--lilac); }
+  .hero p.lead { color: var(--muted); font-size: 17px; margin: 0; max-width: 60ch; }
+  .hero-icon { width: min(70vw, 360px); justify-self: center; filter: drop-shadow(0 30px 40px rgba(0,0,0,.45)); }
+  .notes { display: grid; gap: 10px; margin: 6px 0 0; padding: 0; list-style: none; }
+  .notes li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; color: var(--muted); font-size: 15px;
+    background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+  .notes li b { color: var(--fg); font-weight: 600; }
+  .notes .n { width: 26px; height: 26px; border-radius: 50%; background: var(--purple); color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 700; }
+  .notes li.draft { border-color: rgba(183,156,245,.45); background: rgba(104,6,204,.18); }
+
+  /* status bar */
+  .status { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; margin: 22px 0 6px;
+    background: rgba(11,4,32,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px;
+    display: block; font-size: 14px; color: var(--muted); }
+  .status b { color: var(--fg); }
+  .status .mine { color: var(--lilac); font-weight: 600; }
+
+  /* gallery */
+  h2 { font-size: 24px; margin: 30px 0 12px; letter-spacing: -0.01em; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+  @media (min-width: 720px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1100px) { .grid { grid-template-columns: 1fr 1fr 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; min-width: 0;
+    transition: border-color .2s, box-shadow .2s; }
+  .card.voted { border-color: var(--lilac); box-shadow: 0 0 0 2px rgba(183,156,245,.35), 0 20px 50px rgba(104,6,204,.35); }
+  .shot { background: #0a0318; display: grid; place-items: center; aspect-ratio: 4 / 3.2; cursor: zoom-in; border: 0; padding: 10px; width: 100%; }
+  .shot img { max-width: 100%; max-height: 100%; width: auto; height: auto; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+  .meta { padding: 14px 16px 16px; display: grid; gap: 12px; }
+  .meta-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .meta h3 { margin: 0; font-size: 18px; }
+  .meta .tag { font-size: 13px; color: var(--dim); }
+  .bar { height: 6px; border-radius: 6px; background: rgba(255,255,255,.08); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--purple), var(--lilac)); transition: width .5s; }
+  .count { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .vote { appearance: none; border: 0; border-radius: 12px; padding: 13px 14px; font: 600 16px var(--font); cursor: pointer;
+    background: var(--purple); color: #fff; transition: background .2s, transform .1s; width: 100%; }
+  .vote:hover { background: #7a14e6; }
+  .vote:active { transform: scale(.98); }
+  .vote[disabled] { opacity: .6; cursor: progress; }
+  .card.voted .vote { background: rgba(183,156,245,.16); color: var(--lilac); border: 1px solid rgba(183,156,245,.5); }
+  .results-hidden .bar, .results-hidden .count { display: none; }
+
+  /* lightbox */
+  .lb { position: fixed; inset: 0; z-index: 20; background: rgba(5,2,15,.94); display: grid; grid-template-rows: auto 1fr auto;
+    padding: calc(env(safe-area-inset-top, 0px) + 10px) max(12px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 12px) max(12px, env(safe-area-inset-left, 0px)); }
+  .lb-top { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 15px; }
+  .lb-img { display: grid; place-items: center; min-height: 0; touch-action: pan-y; }
+  .lb-img img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
+  .lb-bottom { display: grid; grid-template-columns: 52px 1fr 52px; gap: 10px; align-items: center; max-width: 560px; width: 100%; margin: 0 auto; }
+  .icon-btn { appearance: none; width: 52px; height: 52px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,.06); color: #fff; font-size: 22px; cursor: pointer; }
+  .close { width: 44px; height: 44px; font-size: 20px; }
+
+  /* note */
+  .note-box { margin: 40px 0 20px; background: linear-gradient(160deg, rgba(104,6,204,.35), rgba(23,10,61,.9)); border: 1px solid rgba(183,156,245,.35); border-radius: 22px; padding: 22px 18px; display: grid; gap: 14px; }
+  .note-box h2 { margin: 0; }
+  .note-box p { margin: 0; color: var(--muted); }
+  label { font-size: 14px; color: var(--muted); display: grid; gap: 6px; }
+  input, textarea { font: 16px var(--font); color: #fff; background: rgba(11,4,32,.7); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; width: 100%; }
+  textarea { min-height: 130px; resize: vertical; }
+  input:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--lilac); outline-offset: 2px; }
+  .sent { color: var(--ok); font-weight: 600; }
+  footer { color: var(--dim); font-size: 13px; padding-block: 18px 40px; text-align: center; }
+  .toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); transform: translateX(-50%); z-index: 30;
+    background: #fff; color: #140838; font-weight: 600; padding: 12px 18px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.4); max-width: calc(100% - 32px); }
+  @media (min-width: 900px) {
+    .hero-grid { grid-template-columns: 1.3fr 1fr; }
+    .hero-icon { width: 380px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="wrap">
+  <header class="hero">
+    <div class="top">
+      <img class="logo" id="logo" alt="Gənclərin Sosial Media Forumu">
+      <span class="pill">Səsvermə açıqdır</span>
+    </div>
+    <div class="hero-grid">
+      <div style="display:grid;gap:16px;min-width:0">
+        <h1>GSMF26 <span>Plaket</span> Design</h1>
+        <p class="lead">Salam! Bunlar GSMF26 plaketi üçün hazırlanmış dizayn variantlarıdır. Hamısına baxın və ən çox bəyəndiyiniz birinə səs verin. Ən çox səs toplayan variant üzərində Kamran işləyib son versiyanı hazırlayacaq.</p>
+        <ul class="notes">
+          <li class="draft"><span class="n">!</span><span><b>Nümunələrdəki yazılar draftdır.</b> Ad, mətn və tarixə fikir verməyin, yalnız dizayna baxın.</span></li>
+        </ul>
+      </div>
+      <img class="hero-icon" id="heroIcon" alt="">
+    </div>
+  </header>
+
+  <div class="status" id="status" aria-live="polite">Səslər yüklənir…</div>
+
+  <h2>Variantlar</h2>
+  <label style="margin-bottom:14px;max-width:420px">Adınız (istəyə görə)
+    <input id="voterName" maxlength="60" placeholder="Məs: Aysel" autocomplete="name">
+  </label>
+  <div class="grid results-hidden" id="grid"></div>
+
+  <section class="note-box" id="note">
+    <h2>Kamrana ürək sözləri</h2>
+    <p>Kamrana ürək sözlərinizi bura yaza bilərsiniz. Ona dizayn kursu da təklif edə bilərsiniz.</p>
+    <label>Adınız (istəyə görə)
+      <input id="noteName" maxlength="60" autocomplete="name">
+    </label>
+    <label>Mesajınız
+      <textarea id="noteText" maxlength="2000" placeholder="Bura yazın…"></textarea>
+    </label>
+    <button class="vote" id="noteSend" type="button">Göndər</button>
+    <div id="noteMsg" aria-live="polite"></div>
+  </section>
+  <footer>Gənclərin Sosial Media Forumu · 2026</footer>
+</div>
+
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbTitle"></span><button class="icon-btn close" id="lbClose" type="button" aria-label="Bağla">✕</button></div>
+  <div class="lb-img" id="lbImgWrap"><img id="lbImg" alt=""></div>
+  <div class="lb-bottom">
+    <button class="icon-btn" id="lbPrev" type="button" aria-label="Əvvəlki">‹</button>
+    <button class="vote" id="lbVote" type="button">Bu varianta səs ver</button>
+    <button class="icon-btn" id="lbNext" type="button" aria-label="Növbəti">›</button>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>window.ASSETS={logo:'img/logo.png',icon:'img/icon.png',v17:'img/v17.jpg',v16:'img/v16.jpg',v15:'img/v15.jpg',v13:'img/v13.jpg',v12:'img/v12.jpg',v6:'img/v6.jpg',v4:'img/v4.jpg',v3:'img/v3.jpg',v18:'img/v18.jpg',v19:'img/v19.jpg',v20:'img/v20.jpg',v21:'img/v21.jpg'};
+var API='https://script.google.com/macros/s/AKfycbxWSX244M2jkQOPPOydCY5gTH_6HHzTOKF186xKDiQVX1X5xibwImznl_xWKCyjH5y3Yw/exec';
+(function(){
+  function mk(ok, fail){
+    function call(b){
+      fetch(API, { method: 'POST', body: JSON.stringify(b) })
+        .then(function (r) { return r.json(); })
+        .then(function (j) { if (!j.ok) throw new Error(j.error || 'Xəta baş verdi'); if (ok) ok(j.data); })
+        .catch(function (e) { if (fail) fail(e); });
+    }
+    return {
+      withSuccessHandler: function (f) { return mk(f, fail); },
+      withFailureHandler: function (f) { return mk(ok, f); },
+      getState: function (id) { call({ action: 'state', voterId: id }); },
+      vote: function (id, v, n) { call({ action: 'vote', voterId: id, variant: v, name: n }); },
+      sendNote: function (n, t) { call({ action: 'note', name: n, text: t }); }
+    };
+  }
+  window.google = { script: { run: mk(null, null) } };
+})();
+</script>
+<script>
+  var V = [
+    { id: 'v17', name: 'Premium · orta', tag: 'bənövşəyi' },
+    { id: 'v16', name: 'Premium · icon solda', tag: 'bənövşəyi' },
+    { id: 'v15', name: 'Premium · icon sağda', tag: 'bənövşəyi' },
+    { id: 'v13', name: '3D icon', tag: 'ağ · şaquli' },
+    { id: 'v12', name: 'Möhürlü', tag: 'ağ' },
+    { id: 'v6',  name: 'Bənövşəyi başlıq', tag: 'ağ' },
+    { id: 'v4',  name: 'Geometrik', tag: 'ağ + bənövşəyi' },
+    { id: 'v3',  name: 'Pattern · şaquli', tag: 'ağ' },
+    { id: 'v18', name: 'Ağ plaket', tag: 'ağ · şaquli' },
+    { id: 'v19', name: 'Bənövşəyi plaket', tag: 'bənövşəyi · şaquli' },
+    { id: 'v20', name: 'Şüşə plaket', tag: 'lavanda · şaquli' },
+    { id: 'v21', name: 'Split plaket', tag: 'ağ + bənövşəyi · şaquli' }
+  ];
+  var state = { counts: {}, mine: null, total: 0 };
+  var busy = false, lbIndex = 0;
+  var $ = function (id) { return document.getElementById(id); };
+
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  var voterId = store('gsmf26_voter');
+  if (!voterId) {
+    voterId = (Date.now().toString(36) + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)).replace(/[^a-z0-9]/g, '').slice(0, 32);
+    store('gsmf26_voter', voterId);
+  }
+  $('voterName').value = store('gsmf26_name') || '';
+  $('noteName').value = store('gsmf26_name') || '';
+  $('voterName').addEventListener('change', function () { store('gsmf26_name', this.value.trim()); });
+
+  $('logo').src = window.ASSETS.logo;
+  $('heroIcon').src = window.ASSETS.icon;
+
+  function toast(t) { var el = $('toast'); el.textContent = t; el.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(function () { el.hidden = true; }, 2600); }
+
+  function build() {
+    var g = $('grid'); g.innerHTML = '';
+    V.forEach(function (v, i) {
+      var c = document.createElement('article'); c.className = 'card'; c.id = 'card-' + v.id;
+      c.innerHTML =
+        '<button class="shot" type="button" aria-label="' + v.name + ' böyüt"><img loading="lazy" alt="' + v.name + '"></button>' +
+        '<div class="meta"><div class="meta-top"><h3>' + (i + 1) + '. ' + v.name + '</h3><span class="tag">' + v.tag + '</span></div>' +
+        '<div class="bar"><i></i></div><div class="count"></div>' +
+        '<button class="vote" type="button">Səs ver</button></div>';
+      c.querySelector('img').src = window.ASSETS[v.id];
+      c.querySelector('.shot').addEventListener('click', function () { openLb(i); });
+      c.querySelector('.vote').addEventListener('click', function () { doVote(v.id); });
+      g.appendChild(c);
+    });
+  }
+
+  function render() {
+    var max = 0; V.forEach(function (v) { max = Math.max(max, state.counts[v.id] || 0); });
+    V.forEach(function (v, i) {
+      var c = $('card-' + v.id), n = state.counts[v.id] || 0, mine = state.mine === v.id;
+      c.classList.toggle('voted', mine);
+      c.querySelector('.vote').textContent = mine ? '✓ Sənin səsin' : (state.mine ? 'Səsi bura keçir' : 'Səs ver');
+      c.querySelector('.bar i').style.width = (state.total ? Math.round(n / state.total * 100) : 0) + '%';
+      c.querySelector('.count').textContent = n + ' səs' + (state.total ? ' · ' + Math.round(n / state.total * 100) + '%' : '');
+    });
+    $('grid').classList.toggle('results-hidden', !state.mine);
+    var mineV = V.filter(function (v) { return v.id === state.mine; })[0];
+    $('status').innerHTML = state.mine
+      ? 'Sənin səsin: <span class="mine">' + (V.indexOf(mineV) + 1) + '. ' + mineV.name + '</span> · Cəmi <b>' + state.total + '</b> səs'
+      : 'Hələ səs verməmisən · Cəmi <b>' + state.total + '</b> səs. Nəticələr səs verəndən sonra görünür.';
+    if (!$('lb').hidden) syncLb();
+  }
+
+  function load() {
+    google.script.run.withSuccessHandler(function (s) { state = s; render(); })
+      .withFailureHandler(function () { $('status').textContent = 'Səsləri yükləmək alınmadı. Səhifəni yeniləyin.'; })
+      .getState(voterId);
+  }
+
+  function doVote(id) {
+    if (busy) return;
+    if (state.mine === id) { toast('Bu variant artıq sənin seçimindir'); return; }
+    busy = true;
+    document.querySelectorAll('.vote').forEach(function (b) { b.disabled = true; });
+    var name = $('voterName').value.trim(); store('gsmf26_name', name);
+    google.script.run.withSuccessHandler(function (s) {
+      busy = false; document.querySelectorAll('.vote').forEach(function (b) { b.disabled = false; });
+      state = s; render(); toast('Səsin qeydə alındı ✓');
+    }).withFailureHandler(function (e) {
+      busy = false; document.querySelectorAll('.vote').forEach(function (b) { b.disabled = false; });
+      toast((e && e.message) || 'Səs göndərilmədi, yenidən yoxla');
+    }).vote(voterId, id, name);
+  }
+
+  // lightbox
+  function openLb(i) { lbIndex = i; $('lb').hidden = false; document.body.style.overflow = 'hidden'; syncLb(); }
+  function closeLb() { $('lb').hidden = true; document.body.style.overflow = ''; }
+  function syncLb() {
+    var v = V[lbIndex];
+    $('lbImg').src = window.ASSETS[v.id]; $('lbImg').alt = v.name;
+    $('lbTitle').textContent = (lbIndex + 1) + ' / ' + V.length + ' · ' + v.name;
+    $('lbVote').textContent = state.mine === v.id ? '✓ Sənin səsin' : 'Bu varianta səs ver';
+  }
+  function step(d) { lbIndex = (lbIndex + d + V.length) % V.length; syncLb(); }
+  $('lbClose').addEventListener('click', closeLb);
+  $('lbPrev').addEventListener('click', function () { step(-1); });
+  $('lbNext').addEventListener('click', function () { step(1); });
+  $('lbVote').addEventListener('click', function () { doVote(V[lbIndex].id); });
+  document.addEventListener('keydown', function (e) {
+    if ($('lb').hidden) return;
+    if (e.key === 'Escape') closeLb(); if (e.key === 'ArrowLeft') step(-1); if (e.key === 'ArrowRight') step(1);
+  });
+  var sx = null;
+  $('lbImgWrap').addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; }, { passive: true });
+  $('lbImgWrap').addEventListener('touchend', function (e) {
+    if (sx === null) return; var dx = e.changedTouches[0].clientX - sx; sx = null;
+    if (Math.abs(dx) > 45) step(dx < 0 ? 1 : -1);
+  });
+
+  // note
+  $('noteSend').addEventListener('click', function () {
+    var t = $('noteText').value.trim();
+    if (t.length < 2) { $('noteMsg').textContent = 'Əvvəlcə mesajı yazın.'; return; }
+    var btn = this; btn.disabled = true; btn.textContent = 'Göndərilir…';
+    google.script.run.withSuccessHandler(function () {
+      btn.disabled = false; btn.textContent = 'Göndər'; $('noteText').value = '';
+      $('noteMsg').innerHTML = '<span class="sent">Göndərildi, sağ olun! Kamran oxuyacaq.</span>';
+    }).withFailureHandler(function (e) {
+      btn.disabled = false; btn.textContent = 'Göndər';
+      $('noteMsg').textContent = (e && e.message) || 'Göndərilmədi, yenidən yoxlayın.';
+    }).sendNote($('noteName').value.trim(), t);
+  });
+
+  build(); load();
+</script>
+</body>
+</html>
