@@ -112,6 +112,13 @@
   textarea { min-height: 130px; resize: vertical; }
   input:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--lilac); outline-offset: 2px; }
   .sent { color: var(--ok); font-weight: 600; }
+  .who { display: flex; flex-wrap: wrap; gap: 6px; }
+  .who span { font-size: 13px; color: var(--fg); background: rgba(183,156,245,.14); border: 1px solid rgba(183,156,245,.3); border-radius: 999px; padding: 3px 10px; }
+  .who span.me { background: var(--purple); border-color: var(--purple); }
+  .who em { font-style: normal; font-size: 13px; color: var(--dim); }
+  .name-box { display: grid; gap: 6px; max-width: 420px; margin-bottom: 14px; }
+  .name-box.need input { border-color: #ff9bb0; }
+  .name-box small { color: var(--dim); font-size: 13px; }
   footer { color: var(--dim); font-size: 13px; padding-block: 18px 40px; text-align: center; }
   .toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); transform: translateX(-50%); z-index: 30;
     background: #fff; color: #140838; font-weight: 600; padding: 12px 18px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.4); max-width: calc(100% - 32px); }
@@ -145,10 +152,10 @@
   <div class="status" id="status" aria-live="polite">Səslər yüklənir…</div>
 
   <h2>Variantlar</h2>
-  <label style="margin-bottom:14px;max-width:420px">Adınız (istəyə görə)
+  <div class="name-box" id="nameBox"><label for="voterName">Adınız (səs vermək üçün)</label>
     <input id="voterName" maxlength="60" placeholder="Məs: Aysel" autocomplete="name">
-  </label>
-  <div class="grid results-hidden" id="grid"></div>
+    <small>Adınız seçdiyiniz variantın altında hamıya görünəcək.</small></div>
+  <div class="grid" id="grid"></div>
 
   <section class="note-box" id="note">
     <h2>Kamrana ürək sözləri</h2>
@@ -225,6 +232,8 @@ var API='https://script.google.com/macros/s/AKfycbxWSX244M2jkQOPPOydCY5gTH_6HHzT
   $('voterName').value = store('gsmf26_name') || '';
   $('noteName').value = store('gsmf26_name') || '';
   $('voterName').addEventListener('change', function () { store('gsmf26_name', this.value.trim()); });
+  $('voterName').addEventListener('input', function () { $('nameBox').classList.remove('need'); });
+  function myName() { return $('voterName').value.trim(); }
 
   $('logo').src = window.ASSETS.logo;
   $('heroIcon').src = window.ASSETS.icon;
@@ -238,7 +247,7 @@ var API='https://script.google.com/macros/s/AKfycbxWSX244M2jkQOPPOydCY5gTH_6HHzT
       c.innerHTML =
         '<button class="shot" type="button" aria-label="' + v.name + ' böyüt"><img loading="lazy" alt="' + v.name + '"></button>' +
         '<div class="meta"><div class="meta-top"><h3>' + (i + 1) + '. ' + v.name + '</h3><span class="tag">' + v.tag + '</span></div>' +
-        '<div class="bar"><i></i></div><div class="count"></div>' +
+        '<div class="bar"><i></i></div><div class="count"></div><div class="who"></div>' +
         '<button class="vote" type="button">Səs ver</button></div>';
       c.querySelector('img').src = window.ASSETS[v.id];
       c.querySelector('.shot').addEventListener('click', function () { openLb(i); });
@@ -255,12 +264,15 @@ var API='https://script.google.com/macros/s/AKfycbxWSX244M2jkQOPPOydCY5gTH_6HHzT
       c.querySelector('.vote').textContent = mine ? '✓ Sənin səsin' : (state.mine ? 'Səsi bura keçir' : 'Səs ver');
       c.querySelector('.bar i').style.width = (state.total ? Math.round(n / state.total * 100) : 0) + '%';
       c.querySelector('.count').textContent = n + ' səs' + (state.total ? ' · ' + Math.round(n / state.total * 100) + '%' : '');
+      var who = c.querySelector('.who'); who.innerHTML = '';
+      var names = (state.voters && state.voters[v.id]) || [];
+      if (!names.length) { var em = document.createElement('em'); em.textContent = 'Hələ səs yoxdur'; who.appendChild(em); }
+      names.forEach(function (nm) { var s = document.createElement('span'); s.textContent = nm; if (mine && nm === myName()) s.className = 'me'; who.appendChild(s); });
     });
-    $('grid').classList.toggle('results-hidden', !state.mine);
     var mineV = V.filter(function (v) { return v.id === state.mine; })[0];
     $('status').innerHTML = state.mine
       ? 'Sənin səsin: <span class="mine">' + (V.indexOf(mineV) + 1) + '. ' + mineV.name + '</span> · Cəmi <b>' + state.total + '</b> səs'
-      : 'Hələ səs verməmisən · Cəmi <b>' + state.total + '</b> səs. Nəticələr səs verəndən sonra görünür.';
+      : 'Hələ səs verməmisən · Cəmi <b>' + state.total + '</b> səs';
     if (!$('lb').hidden) syncLb();
   }
 
@@ -273,9 +285,10 @@ var API='https://script.google.com/macros/s/AKfycbxWSX244M2jkQOPPOydCY5gTH_6HHzT
   function doVote(id) {
     if (busy) return;
     if (state.mine === id) { toast('Bu variant artıq sənin seçimindir'); return; }
+    if (!myName() && !state.mine) { closeLb(); $('nameBox').classList.add('need'); $('voterName').focus(); $('nameBox').scrollIntoView({ behavior: 'smooth', block: 'center' }); toast('Əvvəlcə adını yaz'); return; }
     busy = true;
     document.querySelectorAll('.vote').forEach(function (b) { b.disabled = true; });
-    var name = $('voterName').value.trim(); store('gsmf26_name', name);
+    var name = myName(); store('gsmf26_name', name);
     google.script.run.withSuccessHandler(function (s) {
       busy = false; document.querySelectorAll('.vote').forEach(function (b) { b.disabled = false; });
       state = s; render(); toast('Səsin qeydə alındı ✓');
